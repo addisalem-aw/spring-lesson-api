@@ -45,6 +45,17 @@ public class LessonController {
         else
         return new ResponseEntity(HttpStatus.NOT_FOUND);
 
+    }
+    @PatchMapping("lessons/{id}")
+    public ResponseEntity<Lesson> updateLessonRecord(@RequestBody Lesson lesson,@PathVariable("id" )Long id){
+        Optional<Lesson> l=lessonRepository.findById(id);
+        if(l.isPresent()){
+            l.get().setTitle(lesson.getTitle());
+            l.get().setDeliveredOn("2017-04-12");
+            return new ResponseEntity(l,HttpStatus.OK);
+        }
+       else
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
 
     }
 
