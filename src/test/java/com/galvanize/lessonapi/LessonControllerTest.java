@@ -61,7 +61,7 @@ public class LessonControllerTest {
     @Transactional
     @Rollback
     public void testPatchLesson() throws Exception {
-        String json="{\"title\":\"java\",\"deliveredOn\":\"2017-04-12\"}";
+        String json="{\"title\":\"java\",\"deliveredOn\":2017-04-12}";
         Lesson l = new Lesson();
         l.setTitle("Java");
         lessonRepository.save(l);
@@ -71,8 +71,5 @@ public class LessonControllerTest {
         this.mvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.deliveredOn").value(l.getDeliveredOn()));
-
-
     }
-
 }

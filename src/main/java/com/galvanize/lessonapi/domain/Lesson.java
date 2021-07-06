@@ -1,9 +1,12 @@
 package com.galvanize.lessonapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 public class Lesson {
@@ -11,14 +14,15 @@ public class Lesson {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
-    private String deliveredOn;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date deliveredOn;
     public Lesson(){}
     public Lesson(long id, String title) {
         this.id = id;
         this.title = title;
     }
 
-    public Lesson(String title, String deliveredOn) {
+    public Lesson(String title, Date deliveredOn) {
         this.title = title;
         this.deliveredOn = deliveredOn;
     }
@@ -39,11 +43,11 @@ public class Lesson {
         this.title = title;
     }
 
-    public String getDeliveredOn() {
+    public Date getDeliveredOn() {
         return deliveredOn;
     }
 
-    public void setDeliveredOn(String deliveredOn) {
+    public void setDeliveredOn(Date deliveredOn) {
         this.deliveredOn = deliveredOn;
     }
 }

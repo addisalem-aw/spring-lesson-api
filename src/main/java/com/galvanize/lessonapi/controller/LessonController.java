@@ -4,6 +4,7 @@ import com.galvanize.lessonapi.domain.Lesson;
 import com.galvanize.lessonapi.repository.LessonRepository;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ZeroCopyHttpOutputMessage;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,13 +53,37 @@ public class LessonController {
         Optional<Lesson> l=lessonRepository.findById(id);
         if(l.isPresent()){
             l.get().setTitle(lesson.getTitle());
-            l.get().setDeliveredOn("2017-04-12");
+            l.get().setDeliveredOn(lesson.getDeliveredOn());
+            lessonRepository.save(l.get());
             return new ResponseEntity(l,HttpStatus.OK);
         }
        else
         return new ResponseEntity(HttpStatus.NOT_FOUND);
 
     }
+
+    //get lesson by title endpoint
+    @GetMapping("/lessons/find/{title}")
+    public ResponseEntity<Lesson> getLessonByTitle(@PathVariable("title") String title){
+
+        Lesson lesson=lessonRepository.findByTitle(title);
+
+        if(lesson==null){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        else{
+            return new ResponseEntity(lesson,HttpStatus.OK);
+        }
+    }
+
+    //get lesson between date 1 and date2
+    @GetMapping("/lessons/between")
+    public ResponseEntity<List<Lesson>> getLessonBetweenDates(@RequestParam("date1") Date date1, @RequestParam("date2") Date date2){
+        List<Lesson> list=lessonRepository.getAllBetweenDates(date1,date2);
+        return new ResponseEntity(list,HttpStatus.OK);
+
+    }
+
 
 
 
